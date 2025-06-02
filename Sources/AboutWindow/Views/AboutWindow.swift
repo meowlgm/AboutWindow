@@ -7,13 +7,36 @@
 
 import SwiftUI
 
-public struct AboutWindow: Scene {
-    
-    public init() {}
+public struct AboutWindow<Actions: View, Footer: View>: Scene {
+    let actions: () -> Actions
+    let footer: () -> Footer
+
+    public init(
+        @ViewBuilder actions: @escaping () -> Actions,
+        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
+    ) {
+        self.actions = actions
+        self.footer = footer
+    }
 
     public var body: some Scene {
         Window("", id: DefaultSceneID.about) {
-            AboutView()
+            AboutView(actions: actions, footer: footer)
+                .task {
+                    if let window = NSApp.findWindow(DefaultSceneID.about) {
+                        window.styleMask = [
+                            .titled, .closable, .fullSizeContentView, .nonactivatingPanel
+                        ]
+
+                        window.titleVisibility = .hidden
+                        window.titlebarAppearsTransparent = true
+                        window.backgroundColor = .clear
+                        window.isMovableByWindowBackground = true
+
+                        window.standardWindowButton(.zoomButton)?.isHidden = true
+                        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+                    }
+                }
         }
         .defaultSize(width: 530, height: 220)
         .windowResizability(.contentSize)

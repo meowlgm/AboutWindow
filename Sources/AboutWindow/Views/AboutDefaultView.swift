@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AboutDefaultView: View {
+public struct AboutDefaultView<Actions: View, Footer: View>: View {
     private var appVersion: String {
         Bundle.versionString ?? "No Version"
     }
@@ -22,17 +22,32 @@ struct AboutDefaultView: View {
 
     @Binding var aboutMode: AboutMode
     var namespace: Namespace.ID
+    
+    let actions: () -> Actions
+    let footer: () -> Footer
+    
+    public init(
+        aboutMode: Binding<AboutMode>,
+        namespace: Namespace.ID,
+        @ViewBuilder actions: @escaping () -> Actions,
+        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
+    ) {
+        self._aboutMode = aboutMode
+        self.namespace = namespace
+        self.actions = actions
+        self.footer = footer
+    }
 
     @Environment(\.colorScheme)
     var colorScheme
 
-    private static var licenseURL = URL(string: "https://github.com/CodeEditApp/CodeEdit/blob/main/LICENSE.md")!
+    private var licenseURL = URL(string: "https://github.com/CodeEditApp/CodeEdit/blob/main/LICENSE.md")!
 
     let smallTitlebarHeight: CGFloat = 28
     let mediumTitlebarHeight: CGFloat = 113
     let largeTitlebarHeight: CGFloat = 231
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             Image(nsImage: NSApp.applicationIconImage)
                 .resizable()
@@ -72,40 +87,8 @@ struct AboutDefaultView: View {
         VStack {
             Spacer()
             VStack {
-                Button {
-                    aboutMode = .contributors
-                } label: {
-                    Text("Contributors")
-                        .foregroundColor(.primary)
-                        .frame(maxWidth: .infinity)
-                }
-                .controlSize(.large)
-                .buttonStyle(.blur)
-
-                Button {
-                    aboutMode = .acknowledgements
-                } label: {
-                    Text("Acknowledgements")
-                        .foregroundColor(.primary)
-                        .frame(maxWidth: .infinity)
-                }
-                .controlSize(.large)
-                .buttonStyle(.blur)
-
-                VStack(spacing: 2) {
-                    Link(destination: Self.licenseURL) {
-                        Text("MIT License")
-                            .underline()
-
-                    }
-                    Text(Bundle.copyrightString ?? "")
-                }
-                .textSelection(.disabled)
-                .font(.system(size: 11, weight: .regular))
-                .foregroundColor(Color(.tertiaryLabelColor))
-                .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
-                .padding(.top, 12)
-                .padding(.bottom, 24)
+               actions()
+               footer()
             }
             .matchedGeometryEffect(id: "Titlebar", in: namespace, properties: .position, anchor: .top)
             .matchedGeometryEffect(id: "ScrollView", in: namespace, properties: .position, anchor: .top)
