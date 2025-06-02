@@ -24,7 +24,9 @@ A customizable About window for macOS applications, featuring an app icon, versi
 ![GitHub forks](https://img.shields.io/github/forks/CodeEditApp/AboutWindow?style=flat-square)
 [![Discord Badge](https://img.shields.io/discord/951544472238444645?color=5865F2&label=Discord&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/vChUXVf9Em)
 
-<img width="1048" alt="image" src="https://github.com/user-attachments/assets/f785b253-db5d-4429-a0fd-82c8a5cf486e" />
+<p align="center">
+  <img width="830" alt="image" src="https://github.com/user-attachments/assets/de69c6dc-7615-4c9c-a422-5592f5beec94" />
+</p>
 
 ## Documentation
 
