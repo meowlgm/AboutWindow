@@ -13,9 +13,14 @@ struct AboutWindowExampleApp: App {
     var body: some Scene {
         Group {
             AboutWindow {
-                AboutActionView(title: "Acknowledgements", action: { print("Hello") })
-                AboutActionView(title: "Credits", action: { print("Hello") })
-                AboutActionView(title: "Contributors", action: { print("Hello") })
+                AboutActionView(title: "Acknowledgements", destination: {
+                    AcknowledgementsView()
+                })
+                AboutActionView(title: "Credits", destination: { Text("Hellow") })
+      
+                AboutActionCard(title: "Jello") {
+                    Text("Molley")
+                }
             } footer: {
                 CopyrightLicenseView()
             }

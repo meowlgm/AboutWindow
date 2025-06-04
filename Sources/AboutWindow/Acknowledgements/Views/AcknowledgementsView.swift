@@ -7,12 +7,16 @@
 
 import SwiftUI
 
-struct AcknowledgementsView: View {
+public struct AcknowledgementsView: View {
     @StateObject var model = AcknowledgementsViewModel()
-    @Binding var aboutMode: AboutMode
-    var namespace: Namespace.ID
+    @State var aboutMode: AboutMode
+    @Namespace var namespace
+    
+    public init(aboutMode: AboutMode = .about) {
+        self.aboutMode = aboutMode
+    }
 
-    var body: some View {
+    public var body: some View {
         AboutDetailView(title: "Acknowledgements", aboutMode: $aboutMode, namespace: namespace) {
             LazyVStack(spacing: 0) {
                 ForEach(

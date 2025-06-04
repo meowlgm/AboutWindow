@@ -13,48 +13,68 @@ public enum AboutMode: String, CaseIterable {
     case contributors
 }
 
-public struct AboutView<Actions: View, Footer: View>: View {
+public struct AboutView<Footer: View>: View {
     @Environment(\.openURL)
     private var openURL
     @Environment(\.colorScheme)
     private var colorScheme
     @Environment(\.dismiss)
     private var dismiss
-
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
     @State var aboutMode: AboutMode = .about
-
+    
     @Namespace var animator
     
-    let actions: () -> Actions
+    private let actions: () -> AboutActions
     let footer: () -> Footer
-
+    
+    @State private var path: NavigationPath = .init()
     public init(
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer
     ) {
         self.actions = actions
         self.footer = footer
     }
-
+    
     public var body: some View {
-        ZStack(alignment: .top) {
-            switch aboutMode {
-            case .about:
-                AboutDefaultView(
-                    aboutMode: $aboutMode,
-                    namespace: animator,
-                    actions: actions,
-                    footer: footer
-                )
-            case .acknowledgements:
-                AcknowledgementsView(aboutMode: $aboutMode, namespace: animator)
-            case .contributors:
-                ContributorsView(aboutMode: $aboutMode, namespace: animator)
+        
+        NavigationStack(path: $path) {
+            AboutDefaultView(namespace: animator, actions: actions, footer: footer)
+            .navigationBarBackButtonHidden(true)
+            .environment(\.navigate, { action in
+                path.append(AnyHashable(action))
+            })
+            .navigationDestination(for: AnyHashable.self) { hashable in
+                if let navigable = hashable.base as? any NavigableAction {
+                    navigable.destinationView()
+                } else {
+                    EmptyView()
+                }
             }
+
+            
+        }
+        .overlay(alignment: .topTrailing) {
+            VStack {
+                Button {
+                    withAnimation {
+                        path.removeLast()
+                    }
+                    
+                    
+                } label: {
+                    Text("Remove")
+                }
+            }
+            
         }
         .animation(.smooth, value: aboutMode)
         .ignoresSafeArea()
-        .frame(width: 280, height: 400 - 28)
+        .frame(width: 280, height: 400)
         .fixedSize()
         // hack required to get buttons appearing correctly in light appearance
         // if anyone knows of a better way to do this feel free to refactor

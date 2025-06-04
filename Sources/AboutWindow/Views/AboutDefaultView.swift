@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct AboutDefaultView<Actions: View, Footer: View>: View {
+public struct AboutDefaultView<Footer: View>: View {
     private var appVersion: String {
         Bundle.versionString ?? "No Version"
     }
@@ -20,19 +20,16 @@ public struct AboutDefaultView<Actions: View, Footer: View>: View {
         Bundle.versionPostfix ?? ""
     }
 
-    @Binding var aboutMode: AboutMode
     var namespace: Namespace.ID
     
-    let actions: () -> Actions
+    private let actions: () -> AboutActions
     let footer: () -> Footer
     
     public init(
-        aboutMode: Binding<AboutMode>,
         namespace: Namespace.ID,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
     ) {
-        self._aboutMode = aboutMode
         self.namespace = namespace
         self.actions = actions
         self.footer = footer
@@ -59,7 +56,7 @@ public struct AboutDefaultView<Actions: View, Footer: View>: View {
             VStack(spacing: 0) {
                 Text(Bundle.displayName)
                     .matchedGeometryEffect(id: "Title", in: namespace, properties: .position, anchor: .center)
-                    .blur(radius: aboutMode == .about ? 0 : 10)
+//                    .blur(radius: aboutMode == .about ? 0 : 10)
                     .foregroundColor(.primary)
                     .font(.system(
                         size: 26,
@@ -77,8 +74,8 @@ public struct AboutDefaultView<Actions: View, Footer: View>: View {
                         properties: .position,
                         anchor: UnitPoint(x: 0.5, y: -0.75)
                     )
-                    .blur(radius: aboutMode == .about ? 0 : 10)
-                    .opacity(aboutMode == .about ? 1 : 0)
+//                    .blur(radius: aboutMode == .about ? 0 : 10)
+//                    .opacity(aboutMode == .about ? 1 : 0)
             }
             .padding(.horizontal)
         }
@@ -87,13 +84,15 @@ public struct AboutDefaultView<Actions: View, Footer: View>: View {
         VStack {
             Spacer()
             VStack {
-               actions()
+                ForEach(actions().all, id: \.self) { action in
+                    action.view
+                }
                footer()
             }
             .matchedGeometryEffect(id: "Titlebar", in: namespace, properties: .position, anchor: .top)
             .matchedGeometryEffect(id: "ScrollView", in: namespace, properties: .position, anchor: .top)
-            .blur(radius: aboutMode == .about ? 0 : 10)
-            .opacity(aboutMode == .about ? 1 : 0)
+//            .blur(radius: aboutMode == .about ? 0 : 10)
+//            .opacity(aboutMode == .about ? 1 : 0)
         }
         .padding(.horizontal)
     }

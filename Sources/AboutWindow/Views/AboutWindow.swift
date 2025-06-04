@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-public struct AboutWindow<Actions: View, Footer: View>: Scene {
-    let actions: () -> Actions
+public struct AboutWindow<Footer: View>: Scene {
+    private let actions: () -> AboutActions
     let footer: () -> Footer
 
     public init(
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
     ) {
         self.actions = actions
