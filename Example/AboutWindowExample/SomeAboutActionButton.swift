@@ -1,5 +1,5 @@
 //
-//  AboutActionCard.swift
+//  SomeAboutActionButton.swift
 //  AboutWindowExample
 //
 //  Created by Giorgi Tchelidze on 04.06.25.
@@ -7,7 +7,7 @@
 import SwiftUI
 import AboutWindow
 
-public struct AboutActionCard: View, NavigableAction {
+public struct SomeAboutActionButton: View, NavigableAction {
     let title: String
     let destination: AnyView
 
@@ -34,7 +34,7 @@ public struct AboutActionCard: View, NavigableAction {
         destination
     }
 
-    nonisolated public static func == (lhs: AboutActionCard, rhs: AboutActionCard) -> Bool {
+    nonisolated public static func == (lhs: SomeAboutActionButton, rhs: SomeAboutActionButton) -> Bool {
         lhs.title == rhs.title
     }
 

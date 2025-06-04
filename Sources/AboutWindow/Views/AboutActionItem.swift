@@ -1,5 +1,5 @@
 //
-//  AboutAction.swift
+//  AboutActionItem.swift
 //  AboutWindow
 //
 //  Created by Giorgi Tchelidze on 04.06.25.

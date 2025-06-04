@@ -16,11 +16,13 @@ struct AboutWindowExampleApp: App {
                 AboutActionView(title: "Acknowledgements", destination: {
                     AcknowledgementsView()
                 })
-                AboutActionView(title: "Credits", destination: { Text("Hellow") })
+                AboutActionView(title: "Credits", destination: { Text("Credits View") })
       
-                AboutActionCard(title: "Jello") {
-                    Text("Molley")
+            
+                SomeAboutActionButton(title: "Some Custom Stuff") {
+                    Text("Hello")
                 }
+              
             } footer: {
                 CopyrightLicenseView()
             }
