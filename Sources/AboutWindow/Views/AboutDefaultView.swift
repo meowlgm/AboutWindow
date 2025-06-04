@@ -4,7 +4,6 @@
 //
 //  Created by Wouter Hennen on 21/01/2023.
 //
-
 import SwiftUI
 
 public struct AboutDefaultView<Footer: View>: View {
@@ -24,15 +23,24 @@ public struct AboutDefaultView<Footer: View>: View {
     
     private let actions: () -> AboutActions
     let footer: () -> Footer
+    let iconImage: Image?
+    let title: String?
+    let subtitle: String?
     
     public init(
         namespace: Namespace.ID,
         @ActionsBuilder actions: @escaping () -> AboutActions,
-        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
+        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() },
+        iconImage: Image? = nil,
+        title: String? = nil,
+        subtitle: String? = nil
     ) {
         self.namespace = namespace
         self.actions = actions
         self.footer = footer
+        self.iconImage = iconImage
+        self.title = title
+        self.subtitle = subtitle
     }
 
     @Environment(\.colorScheme)
@@ -46,7 +54,7 @@ public struct AboutDefaultView<Footer: View>: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            Image(nsImage: NSApp.applicationIconImage)
+            (iconImage ?? Image(nsImage: NSApp.applicationIconImage))
                 .resizable()
                 .matchedGeometryEffect(id: "AppIcon", in: namespace)
                 .frame(width: 128, height: 128)
@@ -54,28 +62,25 @@ public struct AboutDefaultView<Footer: View>: View {
                 .padding(.bottom, 8)
 
             VStack(spacing: 0) {
-                Text(Bundle.displayName)
+                Text(title ?? Bundle.displayName)
                     .matchedGeometryEffect(id: "Title", in: namespace, properties: .position, anchor: .center)
-//                    .blur(radius: aboutMode == .about ? 0 : 10)
                     .foregroundColor(.primary)
                     .font(.system(
                         size: 26,
                         weight: .bold
                     ))
-                Text("Version \(appVersion)\(appVersionPostfix) (\(appBuild))")
+                Text(subtitle ?? "Version \(appVersion)\(appVersionPostfix) (\(appBuild))")
                     .textSelection(.enabled)
                     .foregroundColor(Color(.tertiaryLabelColor))
                     .font(.body)
                     .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
                     .padding(.top, 4)
                     .matchedGeometryEffect(
-                        id: "Title",
+                        id: "Version",
                         in: namespace,
                         properties: .position,
                         anchor: UnitPoint(x: 0.5, y: -0.75)
                     )
-//                    .blur(radius: aboutMode == .about ? 0 : 10)
-//                    .opacity(aboutMode == .about ? 1 : 0)
             }
             .padding(.horizontal)
         }
@@ -87,12 +92,10 @@ public struct AboutDefaultView<Footer: View>: View {
                 ForEach(actions().all, id: \.self) { action in
                     action.view
                 }
-               footer()
+                footer()
             }
             .matchedGeometryEffect(id: "Titlebar", in: namespace, properties: .position, anchor: .top)
             .matchedGeometryEffect(id: "ScrollView", in: namespace, properties: .position, anchor: .top)
-//            .blur(radius: aboutMode == .about ? 0 : 10)
-//            .opacity(aboutMode == .about ? 1 : 0)
         }
         .padding(.horizontal)
     }

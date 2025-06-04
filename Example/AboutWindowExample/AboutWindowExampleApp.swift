@@ -12,20 +12,20 @@ import AboutWindow
 struct AboutWindowExampleApp: App {
     var body: some Scene {
         Group {
-            AboutWindow {
-                AboutActionView(title: "Acknowledgements", destination: {
+            AboutWindow(iconImage: Image(systemName: "circle.fill"), actions: {
+                AboutButton(title: "Acknowledgements", destination: {
                     AcknowledgementsView()
                 })
-                AboutActionView(title: "Credits", destination: { Text("Credits View") })
-      
-            
+
+                AboutButton(title: "Credits", destination: { Text("Credits View") })
+
                 SomeAboutActionButton(title: "Some Custom Stuff") {
                     Text("Hello")
                 }
               
-            } footer: {
+            }, footer: {
                 CopyrightLicenseView()
-            }
+            })
         }
     }
 }

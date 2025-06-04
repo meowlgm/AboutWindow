@@ -1,12 +1,12 @@
 //
-//  AboutActionView.swift
+//  AboutButton.swift
 //  AboutWindow
 //
 //  Created by Giorgi Tchelidze on 02.06.25.
 //
 import SwiftUI
 
-public struct AboutActionView: View {
+public struct AboutButton: View {
     private let id = UUID()
     private let title: String
     private let destination: AnyView?
@@ -57,7 +57,7 @@ public struct AboutActionView: View {
 }
 
 // MARK: - Navigable
-extension AboutActionView: NavigableAction {
+extension AboutButton: NavigableAction {
     public func destinationView() -> AnyView {
         destination ?? AnyView(EmptyView())
     }
@@ -65,8 +65,8 @@ extension AboutActionView: NavigableAction {
 
 // MARK: - Hashable + Equatable (nonisolated)
 
-extension AboutActionView: Hashable {
-    nonisolated public static func == (lhs: AboutActionView, rhs: AboutActionView) -> Bool {
+extension AboutButton: Hashable {
+    nonisolated public static func == (lhs: AboutButton, rhs: AboutButton) -> Bool {
         lhs.id == rhs.id
     }
 

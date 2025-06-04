@@ -27,21 +27,36 @@ public struct AboutView<Footer: View>: View {
     
     private let actions: () -> AboutActions
     let footer: () -> Footer
+    let iconImage: Image?
+    let title: String?
+    let subtitle: String?
     
     @State private var path: NavigationPath = .init()
 
     public init(
         @ActionsBuilder actions: @escaping () -> AboutActions,
-        @ViewBuilder footer: @escaping () -> Footer
+        @ViewBuilder footer: @escaping () -> Footer,
+        iconImage: Image? = nil,
+        title: String? = nil,
+        subtitle: String? = nil
     ) {
         self.actions = actions
         self.footer = footer
+        self.iconImage = iconImage
+        self.title = title
+        self.subtitle = subtitle
     }
     
     public var body: some View {
-        
         NavigationStack(path: $path) {
-            AboutDefaultView(namespace: animator, actions: actions, footer: footer)
+            AboutDefaultView(
+                namespace: animator,
+                actions: actions,
+                footer: footer,
+                iconImage: iconImage,
+                title: title,
+                subtitle: subtitle
+            )
             .navigationBarBackButtonHidden(true)
             .environment(\.aboutWindowNavigation, AboutWindowNavigation(
                 navigate: { action in
@@ -63,8 +78,6 @@ public struct AboutView<Footer: View>: View {
                     EmptyView()
                 }
             }
-
-            
         }
         .overlay(alignment: .topTrailing) {
             VStack {
@@ -72,13 +85,10 @@ public struct AboutView<Footer: View>: View {
                     withAnimation {
                         path.removeLast()
                     }
-                    
-                    
                 } label: {
                     Text("Remove")
                 }
             }
-            
         }
         .animation(.smooth, value: aboutMode)
         .ignoresSafeArea()
