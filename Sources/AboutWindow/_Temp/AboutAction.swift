@@ -6,18 +6,18 @@
 //
 import SwiftUI
 
-public struct AboutActionItem: Hashable, Identifiable {
+public struct AboutActionItem: Identifiable, Hashable {
     public let id = UUID()
     public let view: AnyView
-    public let actionView: AboutActionView?
+    public let navTarget: (any NavigableAction)?
 
     public init<V: View>(_ view: V) {
-        if let actionView = view as? AboutActionView {
-            self.view = AnyView(actionView)
-            self.actionView = actionView
-        } else {
+        if let nav = view as? any NavigableAction {
+            self.navTarget = nav
             self.view = AnyView(view)
-            self.actionView = nil
+        } else {
+            self.navTarget = nil
+            self.view = AnyView(view)
         }
     }
 

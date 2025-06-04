@@ -22,8 +22,9 @@ public enum AboutActions {
         }
     }
 
-    public var navigable: [AboutActionView] {
-        all.compactMap { $0.actionView }
+    public var navigable: [any NavigableAction] {
+        all.compactMap { $0.navTarget }
     }
+
 }
 

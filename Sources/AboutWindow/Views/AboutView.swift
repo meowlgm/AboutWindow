@@ -21,9 +21,6 @@ public struct AboutView<Footer: View>: View {
     @Environment(\.dismiss)
     private var dismiss
     
-    @Environment(\.presentationMode)
-    var presentationMode
-    
     @State var aboutMode: AboutMode = .about
     
     @Namespace var animator
@@ -32,6 +29,7 @@ public struct AboutView<Footer: View>: View {
     let footer: () -> Footer
     
     @State private var path: NavigationPath = .init()
+
     public init(
         @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer
@@ -45,9 +43,19 @@ public struct AboutView<Footer: View>: View {
         NavigationStack(path: $path) {
             AboutDefaultView(namespace: animator, actions: actions, footer: footer)
             .navigationBarBackButtonHidden(true)
-            .environment(\.navigate, { action in
-                path.append(AnyHashable(action))
-            })
+            .environment(\.aboutWindowNavigation, AboutWindowNavigation(
+                navigate: { action in
+                    path.append(AnyHashable(action))
+                },
+                pop: {
+                    if !path.isEmpty {
+                        path.removeLast()
+                    }
+                },
+                popToRoot: {
+                    path = NavigationPath()
+                }
+            ))
             .navigationDestination(for: AnyHashable.self) { hashable in
                 if let navigable = hashable.base as? any NavigableAction {
                     navigable.destinationView()

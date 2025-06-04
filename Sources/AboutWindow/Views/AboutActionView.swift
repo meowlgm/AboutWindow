@@ -12,8 +12,8 @@ public struct AboutActionView: View {
     private let destination: AnyView?
     private let action: (() -> Void)?
     
-    @Environment(\.navigate)
-    private var navigate
+    @Environment(\.aboutWindowNavigation)
+    private var aboutWindow
 
     // Action only
     public init(title: String, action: @escaping () -> Void) {
@@ -41,7 +41,7 @@ public struct AboutActionView: View {
             withAnimation {
                 action?()
                 if destination != nil {
-                    navigate?(self)
+                    aboutWindow?.navigate(self)
                 }
             }
         } label: {
@@ -72,41 +72,5 @@ extension AboutActionView: Hashable {
 
     nonisolated public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-    }
-}
-
-public struct AboutActionCard: View, NavigableAction {
-    let title: String
-    let destination: AnyView
-
-    @Environment(\.navigate) private var navigate
-
-    public init<V: View>(title: String, @ViewBuilder destination: () -> V) {
-        self.title = title
-        self.destination = AnyView(destination())
-    }
-
-    public var body: some View {
-        Button(action: {
-            navigate?(self)
-        }) {
-            Text(title)
-                .padding(10)
-                .background(.gray.opacity(0.2))
-                .clipShape(.capsule)
-        }
-        .buttonStyle(.plain)
-    }
-
-    public func destinationView() -> AnyView {
-        destination
-    }
-
-    nonisolated public static func == (lhs: AboutActionCard, rhs: AboutActionCard) -> Bool {
-        lhs.title == rhs.title
-    }
-
-    nonisolated public func hash(into hasher: inout Hasher) {
-        hasher.combine(title)
     }
 }
