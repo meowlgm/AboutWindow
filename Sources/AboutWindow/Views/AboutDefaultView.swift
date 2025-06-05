@@ -21,7 +21,7 @@ public struct AboutDefaultView<Footer: View>: View {
 
     var namespace: Namespace.ID
     
-    private let actions: () -> AboutActions
+    private let actions: (Namespace.ID) -> AboutActions
     let footer: () -> Footer
     let iconImage: Image?
     let title: String?
@@ -29,7 +29,7 @@ public struct AboutDefaultView<Footer: View>: View {
     
     public init(
         namespace: Namespace.ID,
-        @ActionsBuilder actions: @escaping () -> AboutActions,
+        @ActionsBuilder actions: @escaping (Namespace.ID) -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() },
         iconImage: Image? = nil,
         title: String? = nil,
@@ -87,7 +87,7 @@ public struct AboutDefaultView<Footer: View>: View {
         VStack {
             Spacer()
             VStack {
-                ForEach(actions().all, id: \.id) { action in
+                ForEach(actions(namespace).all, id: \.id) { action in
                     action.button
                 }
                 footer()

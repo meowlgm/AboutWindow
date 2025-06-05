@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AboutWindow
 
 public struct ContributorsView: View {
     @StateObject var model = ContributorsViewModel()

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AboutWindow
 
 public struct AcknowledgementsView: View {
     @StateObject var model = AcknowledgementsViewModel()

@@ -25,14 +25,14 @@ public struct AboutView<Footer: View>: View {
     
     @Namespace private var animator
     
-    private let actions: () -> AboutActions
+    private let actions: (Namespace.ID) -> AboutActions
     private let footer: () -> Footer
     private let iconImage: Image?
     private let title: String?
     private let subtitle: String?
     
     public init(
-        @ActionsBuilder actions: @escaping () -> AboutActions,
+        @ActionsBuilder actions: @escaping (Namespace.ID) -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer,
         iconImage: Image? = nil,
         title: String? = nil,
@@ -46,11 +46,10 @@ public struct AboutView<Footer: View>: View {
     }
     
     public var body: some View {
-        VStack {
+        ZStack(alignment: .top) {
             // Root view (AboutDefaultView) or destination view
             if let destinationView = currentView {
                 destinationView
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 AboutDefaultView(
                     namespace: animator,

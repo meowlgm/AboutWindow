@@ -35,4 +35,3 @@ public struct SomeActionButton: View, NavigableAction {
         destination
     }
 }
-

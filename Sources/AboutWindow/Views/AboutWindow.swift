@@ -7,7 +7,7 @@
 import SwiftUI
 
 public struct AboutWindow<Footer: View>: Scene {
-    private let actions: () -> AboutActions
+    private let actions: (Namespace.ID) -> AboutActions
     let footer: () -> Footer
     let iconImage: Image?
     let title: String?
@@ -17,7 +17,7 @@ public struct AboutWindow<Footer: View>: Scene {
         iconImage: Image? = nil,
         title: String? = nil,
         subtitle: String? = nil,
-        @ActionsBuilder actions: @escaping () -> AboutActions,
+        @ActionsBuilder actions: @escaping (Namespace.ID) -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
     ) {
         self.iconImage = iconImage
