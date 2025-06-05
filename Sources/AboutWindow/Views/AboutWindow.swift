@@ -52,7 +52,7 @@ public struct AboutWindow<Footer: View>: Scene {
                     }
                 }
         }
-        .defaultSize(width: 530, height: 220)
+//        .defaultSize(width: 530, height: 220)
         .windowResizability(.contentSize)
         .windowStyle(.hiddenTitleBar)
     }

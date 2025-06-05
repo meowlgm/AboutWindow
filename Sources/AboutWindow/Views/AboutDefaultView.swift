@@ -46,8 +46,6 @@ public struct AboutDefaultView<Footer: View>: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    private var licenseURL = URL(string: "https://github.com/CodeEditApp/CodeEdit/blob/main/LICENSE.md")!
-
     let smallTitlebarHeight: CGFloat = 28
     let mediumTitlebarHeight: CGFloat = 113
     let largeTitlebarHeight: CGFloat = 231
@@ -89,8 +87,8 @@ public struct AboutDefaultView<Footer: View>: View {
         VStack {
             Spacer()
             VStack {
-                ForEach(actions().all, id: \.self) { action in
-                    action.view
+                ForEach(actions().all, id: \.id) { action in
+                    action.button
                 }
                 footer()
             }

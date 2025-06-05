@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-public protocol NavigableAction: Hashable {
+public protocol NavigableAction {
     @MainActor func destinationView() -> AnyView
 }
 

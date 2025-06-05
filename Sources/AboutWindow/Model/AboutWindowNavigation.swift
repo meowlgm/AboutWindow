@@ -9,15 +9,12 @@ import SwiftUI
 public struct AboutWindowNavigation {
     public let navigate: (any NavigableAction) -> Void
     public let pop: () -> Void
-    public let popToRoot: () -> Void
 
     public init(
         navigate: @escaping (any NavigableAction) -> Void,
-        pop: @escaping () -> Void,
-        popToRoot: @escaping () -> Void
+        pop: @escaping () -> Void
     ) {
         self.navigate = navigate
         self.pop = pop
-        self.popToRoot = popToRoot
     }
 }

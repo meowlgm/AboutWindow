@@ -1,5 +1,5 @@
 //
-//  SomeAboutActionButton.swift
+//  SomeActionButton.swift
 //  AboutWindowExample
 //
 //  Created by Giorgi Tchelidze on 04.06.25.
@@ -7,11 +7,12 @@
 import SwiftUI
 import AboutWindow
 
-public struct SomeAboutActionButton: View, NavigableAction {
+public struct SomeActionButton: View, NavigableAction {
     let title: String
     let destination: AnyView
 
-    @Environment(\.aboutWindowNavigation) private var aboutWindow
+    @Environment(\.aboutWindowNavigation)
+    private var aboutWindow
 
     public init<V: View>(title: String, @ViewBuilder destination: () -> V) {
         self.title = title
@@ -33,12 +34,5 @@ public struct SomeAboutActionButton: View, NavigableAction {
     public func destinationView() -> AnyView {
         destination
     }
-
-    nonisolated public static func == (lhs: SomeAboutActionButton, rhs: SomeAboutActionButton) -> Bool {
-        lhs.title == rhs.title
-    }
-
-    nonisolated public func hash(into hasher: inout Hasher) {
-        hasher.combine(title)
-    }
 }
+

@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct ContributorsView: View {
+public struct ContributorsView: View {
     @StateObject var model = ContributorsViewModel()
-    @Binding var aboutMode: AboutMode
-    var namespace: Namespace.ID
+    @State var aboutMode: AboutMode = .about
+    @Namespace var namespace
+    
+    public init() {}
 
-    var body: some View {
+    public var body: some View {
         AboutDetailView(title: "Contributors", aboutMode: $aboutMode, namespace: namespace) {
             LazyVStack(spacing: 0) {
                 ForEach(model.contributors) { contributor in
@@ -37,6 +39,7 @@ class ContributorsViewModel: ObservableObject {
         do {
             let data = try Data(contentsOf: url)
             let root = try JSONDecoder().decode(ContributorsRoot.self, from: data)
+            print(contributors)
             self.contributors = root.contributors
         } catch {
             print(error)

@@ -13,26 +13,24 @@ public enum AboutMode: String, CaseIterable {
     case contributors
 }
 
+import SwiftUI
+
 public struct AboutView<Footer: View>: View {
-    @Environment(\.openURL)
-    private var openURL
-    @Environment(\.colorScheme)
-    private var colorScheme
-    @Environment(\.dismiss)
-    private var dismiss
+    @Environment(\.openURL) private var openURL
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dismiss) private var dismiss
     
-    @State var aboutMode: AboutMode = .about
+    @State private var currentView: AnyView? // Tracks the current view (nil for root)
+    @State private var aboutMode: AboutMode = .about
     
-    @Namespace var animator
+    @Namespace private var animator
     
     private let actions: () -> AboutActions
-    let footer: () -> Footer
-    let iconImage: Image?
-    let title: String?
-    let subtitle: String?
+    private let footer: () -> Footer
+    private let iconImage: Image?
+    private let title: String?
+    private let subtitle: String?
     
-    @State private var path: NavigationPath = .init()
-
     public init(
         @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer,
@@ -48,54 +46,54 @@ public struct AboutView<Footer: View>: View {
     }
     
     public var body: some View {
-        NavigationStack(path: $path) {
-            AboutDefaultView(
-                namespace: animator,
-                actions: actions,
-                footer: footer,
-                iconImage: iconImage,
-                title: title,
-                subtitle: subtitle
-            )
-            .navigationBarBackButtonHidden(true)
-            .environment(\.aboutWindowNavigation, AboutWindowNavigation(
-                navigate: { action in
-                    path.append(AnyHashable(action))
-                },
-                pop: {
-                    if !path.isEmpty {
-                        path.removeLast()
-                    }
-                },
-                popToRoot: {
-                    path = NavigationPath()
-                }
-            ))
-            .navigationDestination(for: AnyHashable.self) { hashable in
-                if let navigable = hashable.base as? any NavigableAction {
-                    navigable.destinationView()
-                } else {
-                    EmptyView()
-                }
+        VStack {
+            // Root view (AboutDefaultView) or destination view
+            if let destinationView = currentView {
+                destinationView
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                AboutDefaultView(
+                    namespace: animator,
+                    actions: actions,
+                    footer: footer,
+                    iconImage: iconImage,
+                    title: title,
+                    subtitle: subtitle
+                )
+             
             }
         }
         .overlay(alignment: .topTrailing) {
-            VStack {
-                Button {
-                    withAnimation {
-                        path.removeLast()
+            if currentView != nil {
+                VStack {
+                    Button {
+                        withAnimation(.smooth) {
+                            currentView = nil // Pop back to root
+                        }
+                    } label: {
+                        Text("Remove")
                     }
-                } label: {
-                    Text("Remove")
                 }
             }
         }
+        .environment(\.aboutWindowNavigation, AboutWindowNavigation(
+            navigate: { action in
+                withAnimation(.smooth) {
+                    if let navigable = action as? any NavigableAction {
+                        currentView = navigable.destinationView()
+                    }
+                }
+            },
+            pop: {
+                withAnimation(.smooth) {
+                    currentView = nil
+                }
+            }
+        ))
         .animation(.smooth, value: aboutMode)
         .ignoresSafeArea()
         .frame(width: 280, height: 400)
         .fixedSize()
-        // hack required to get buttons appearing correctly in light appearance
-        // if anyone knows of a better way to do this feel free to refactor
         .background(.regularMaterial.opacity(0))
         .background(EffectView(.popover, blendingMode: .behindWindow).ignoresSafeArea())
         .background {

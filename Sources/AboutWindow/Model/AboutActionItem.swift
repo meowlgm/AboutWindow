@@ -6,26 +6,18 @@
 //
 import SwiftUI
 
-public struct AboutActionItem: Identifiable, Hashable {
+public struct AboutActionItem: Identifiable {
     public let id = UUID()
-    public let view: AnyView
+    public let button: AnyView
     public let navTarget: (any NavigableAction)?
 
     public init<V: View>(_ view: V) {
         if let nav = view as? any NavigableAction {
             self.navTarget = nav
-            self.view = AnyView(view)
+            self.button = AnyView(view)
         } else {
             self.navTarget = nil
-            self.view = AnyView(view)
+            self.button = AnyView(view)
         }
-    }
-
-    public static func == (lhs: AboutActionItem, rhs: AboutActionItem) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
     }
 }

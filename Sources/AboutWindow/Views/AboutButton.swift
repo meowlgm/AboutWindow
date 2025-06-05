@@ -62,15 +62,3 @@ extension AboutButton: NavigableAction {
         destination ?? AnyView(EmptyView())
     }
 }
-
-// MARK: - Hashable + Equatable (nonisolated)
-
-extension AboutButton: Hashable {
-    nonisolated public static func == (lhs: AboutButton, rhs: AboutButton) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    nonisolated public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
