@@ -24,8 +24,9 @@ public struct SomeActionButton: View, NavigableAction {
             aboutWindow?.navigate(self)
         }) {
             Text(title)
-                .padding(10)
-                .background(.gray.opacity(0.2))
+                .padding(.horizontal, 7.5)
+                .padding(.vertical, 5)
+                .background(.gray.opacity(0.3))
                 .clipShape(.capsule)
         }
         .buttonStyle(.plain)

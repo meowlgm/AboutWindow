@@ -51,8 +51,6 @@ public struct AboutButton: View {
         }
         .controlSize(.large)
         .buttonStyle(.blur)
-
-
     }
 }
 

@@ -4,6 +4,7 @@
 //
 //  Created by Wouter Hennen on 14/03/2023.
 //
+
 import SwiftUI
 
 public struct AboutWindow<Footer: View>: Scene {

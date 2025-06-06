@@ -4,6 +4,7 @@
 //
 //  Created by Wouter Hennen on 21/01/2023.
 //
+
 import SwiftUI
 
 public struct AboutDetailView<Content: View>: View {

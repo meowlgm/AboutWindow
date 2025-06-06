@@ -4,6 +4,7 @@
 //
 //  Created by Andrei Vidrasco on 02.04.2022
 //
+
 import SwiftUI
 
 public struct AboutView<Footer: View>: View {
@@ -52,39 +53,27 @@ public struct AboutView<Footer: View>: View {
              
             }
         }
-        .overlay(alignment: .topTrailing) {
-            if currentView != nil {
-                VStack {
-                    Button {
-                        withAnimation(.smooth) {
-                            currentView = nil // Pop back to root
-                        }
-                    } label: {
-                        Text("Remove")
-                    }
-                }
-            }
-        }
         .environmentObject(NamespaceWrapper(namespace: animator))
         .environment(\.isAboutDetailPresented, currentView != nil)
         .environment(\.aboutWindowNavigation, AboutWindowNavigation(
             navigate: { action in
-                withAnimation(.smooth) {
-                    if let navigable = action as? any NavigableAction {
-                        currentView = navigable.destinationView()
-                    }
+                withAnimation {
+                    currentView = action.destinationView()
                 }
             },
             pop: {
-                withAnimation(.smooth) {
+                withAnimation {
                     currentView = nil
                 }
             }
         ))
         .animation(.smooth, value: currentView == nil)
         .ignoresSafeArea()
-        .frame(width: 280, height: 400)
+        .frame(width: 280)
+        .frame(minHeight: 400 - 28)
         .fixedSize()
+        // hack required to get buttons appearing correctly in light appearance
+        // if anyone knows of a better way to do this feel free to refactor
         .background(.regularMaterial.opacity(0))
         .background(EffectView(.popover, blendingMode: .behindWindow).ignoresSafeArea())
         .background {

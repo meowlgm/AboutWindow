@@ -21,15 +21,15 @@ struct AboutWindowExampleApp: App {
                     ContributorsView()
                 })
 
-                SomeActionButton(title: "Some Custom Stuff") {
-                    MatchedTitle("Hello")
-                }
+//                SomeActionButton(title: "Some Custom Stuff") {
+//                    MatchedTitle("Hello")
+//                }
               
             }, footer: {
                 FooterView(
                     primaryView: {
-                        Link(destination: URL(string: "https://example.com")!) {
-                            Text("Terms")
+                        Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
+                            Text("MIT License")
                                 .underline()
                         }
                     },
@@ -44,7 +44,9 @@ struct AboutWindowExampleApp: App {
 
 struct MatchedTitle: View {
     @EnvironmentObject var namespaceWrapper: NamespaceWrapper
-
+    @Environment(\.aboutWindowNavigation)
+    private var aboutWindow
+    
     let title: String
 
     init(_ title: String) {
@@ -52,8 +54,13 @@ struct MatchedTitle: View {
     }
 
     var body: some View {
-        Text(title)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .matchedGeometryEffect(id: "Title", in: namespaceWrapper.namespace)
+        VStack(alignment: .center) {
+            Text(title)
+                .matchedGeometryEffect(id: "Title", in: namespaceWrapper.namespace)
+            Button("Go Back") {
+                aboutWindow?.pop()
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

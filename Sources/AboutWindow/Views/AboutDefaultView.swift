@@ -4,15 +4,8 @@
 //
 //  Created by Wouter Hennen on 21/01/2023.
 //
-import SwiftUI
 
-public enum AboutNamespaceID: String {
-    case appIcon = "AppIcon"
-    case title = "Title"
-    case subtitle = "Subtitle"
-    case titleBar = "TitleBar"
-    case scrollView = "ScrollView"
-}
+import SwiftUI
 
 public struct AboutDefaultView<Footer: View>: View {
     

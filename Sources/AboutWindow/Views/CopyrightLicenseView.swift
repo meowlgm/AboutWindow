@@ -4,6 +4,7 @@
 //
 //  Created by Giorgi Tchelidze on 02.06.25.
 //
+
 import SwiftUI
 
 public struct FooterView<PrimaryView: View, SecondaryView: View>: View {

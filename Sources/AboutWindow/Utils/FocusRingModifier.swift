@@ -4,6 +4,7 @@
 //
 //  Created by Giorgi Tchelidze on 25.05.25.
 //
+
 import SwiftUI
 
 struct FocusRingModifier<S: InsettableShape>: ViewModifier {

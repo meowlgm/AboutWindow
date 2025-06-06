@@ -4,6 +4,7 @@
 //
 //  Created by Giorgi Tchelidze on 06.06.25.
 //
+
 import SwiftUI
 
 private struct IsDetailPresentedKey: EnvironmentKey {
