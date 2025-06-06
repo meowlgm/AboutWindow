@@ -107,17 +107,25 @@ public struct AboutDefaultView<Footer: View>: View {
             .padding([.top, .leading, .trailing], 24)
             .padding(.bottom, isMinimalContent ? 24 - 14 : 24)
             VStack {
-                ForEach(actions().all, id: \.id) { action in
+                switch actions() {
+                case .none:
+                    EmptyView()
+                case .one(let action):
                     action.button
-                        .blur(radius: !isDetail ? 0 : 10)
-                        .opacity(!isDetail ? 1 : 0)
+                case let .two(action1, action2):
+                    action1.button
+                    action2.button
+                case let .three(action1, action2, action3):
+                    action1.button
+                    action2.button
+                    action3.button
                 }
                 footer()
-                    .blur(radius: !isDetail ? 0 : 10)
-                    .opacity(!isDetail ? 1 : 0)
             }
             .matchedGeometryEffect(id: AboutNamespaceID.titleBar, in: namespace, properties: .position, anchor: .top)
             .matchedGeometryEffect(id: AboutNamespaceID.scrollView, in: namespace, properties: .position, anchor: .top)
+            .blur(radius: !isDetail ? 0 : 10)
+            .opacity(!isDetail ? 1 : 0)
             .padding(.horizontal)
         }
     }
