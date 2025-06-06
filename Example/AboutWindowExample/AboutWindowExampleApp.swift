@@ -22,13 +22,28 @@ struct AboutWindowExampleApp: App {
                 })
 
                 SomeActionButton(title: "Some Custom Stuff") {
-                    Text("Hello")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    MatchedTitle("Hello")
                 }
               
             }, footer: {
                 CopyrightLicenseView()
             })
         }
+    }
+}
+
+struct MatchedTitle: View {
+    @EnvironmentObject var namespaceWrapper: NamespaceWrapper
+
+    let title: String
+
+    init(_ title: String) {
+        self.title = title
+    }
+
+    var body: some View {
+        Text(title)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .matchedGeometryEffect(id: "Title", in: namespaceWrapper.namespace)
     }
 }

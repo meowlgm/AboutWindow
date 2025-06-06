@@ -75,6 +75,7 @@ public struct AboutView<Footer: View>: View {
                 }
             }
         }
+        .environmentObject(NamespaceWrapper(namespace: animator))
         .environment(\.aboutWindowNavigation, AboutWindowNavigation(
             navigate: { action in
                 withAnimation(.smooth) {
