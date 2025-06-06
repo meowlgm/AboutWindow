@@ -109,11 +109,11 @@ public struct AboutDefaultView<Footer: View>: View {
             VStack {
                 ForEach(actions().all, id: \.id) { action in
                     action.button
-                        .blur(radius: !isDetail ? 0 : 20)
+                        .blur(radius: !isDetail ? 0 : 10)
                         .opacity(!isDetail ? 1 : 0)
                 }
                 footer()
-                    .blur(radius: !isDetail ? 0 : 20)
+                    .blur(radius: !isDetail ? 0 : 10)
                     .opacity(!isDetail ? 1 : 0)
             }
             .matchedGeometryEffect(id: AboutNamespaceID.titleBar, in: namespace, properties: .position, anchor: .top)
