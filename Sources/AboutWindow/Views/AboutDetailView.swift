@@ -7,11 +7,11 @@
 import SwiftUI
 
 public struct AboutDetailView<Content: View>: View {
+    
+    @Environment(\.isAboutDetailPresented) private var isDetail
+    @EnvironmentObject var namespaceWrapper: NamespaceWrapper
+    
     var title: String
-
-    @Binding var aboutMode: AboutMode
-
-    var namespace: Namespace.ID
     
     @Environment(\.aboutWindowNavigation)
     private var aboutWindowNavigation
@@ -38,10 +38,8 @@ public struct AboutDetailView<Content: View>: View {
     @State private var scrollOffset: CGFloat = 0
     
     
-    public init(title: String, aboutMode: Binding<AboutMode>, namespace: Namespace.ID, @ViewBuilder content: () -> Content) {
+    public init(title: String, @ViewBuilder content: () -> Content) {
         self.title = title
-        self._aboutMode = aboutMode // Use the underscore to access the projected value of the binding
-        self.namespace = namespace
         self.content = content()
     }
 
@@ -55,16 +53,16 @@ public struct AboutDetailView<Content: View>: View {
                     .padding(.bottom, 8)
             }
             .frame(maxWidth: .infinity)
-            .matchedGeometryEffect(id: "ScrollView", in: namespace, properties: .position, anchor: .top)
-//            .blur(radius: aboutMode != .about ? 0 : 10)
-//            .opacity(aboutMode != .about ? 1 : 0)
+            .matchedGeometryEffect(id: "ScrollView", in: namespaceWrapper.namespace, properties: .position, anchor: .top)
+            .blur(radius: isDetail ? 0 : 10)
+            .opacity(isDetail ? 1 : 0)
             .clipShape(Rectangle())
         }
 
         VStack(spacing: 0) {
             Image(nsImage: NSApp.applicationIconImage)
                 .resizable()
-                .matchedGeometryEffect(id: "AppIcon", in: namespace)
+                .matchedGeometryEffect(id: "AppIcon", in: namespaceWrapper.namespace)
                 .frame(
                     width: getScrollAdjustedValue(
                         minValue: 48,
@@ -124,9 +122,9 @@ public struct AboutDetailView<Content: View>: View {
                             .padding(.trailing)
                     }
                     .contentShape(Rectangle())
-                    .matchedGeometryEffect(id: "Title", in: namespace, properties: .position, anchor: .center)
-//                    .blur(radius: aboutMode != .about ? 0 : 10)
-//                    .opacity(aboutMode != .about ? 1 : 0)
+                    .matchedGeometryEffect(id: "Title", in: namespaceWrapper.namespace, properties: .position, anchor: .center)
+                    .blur(radius: isDetail ? 0 : 10)
+                    .opacity(isDetail ? 1 : 0)
             }
             .buttonStyle(.plain)
 
@@ -140,7 +138,7 @@ public struct AboutDetailView<Content: View>: View {
         }
         .padding(0)
         .frame(maxWidth: .infinity)
-        .matchedGeometryEffect(id: "Titlebar", in: namespace, properties: .position, anchor: .bottom)
+        .matchedGeometryEffect(id: "Titlebar", in: namespaceWrapper.namespace, properties: .position, anchor: .bottom)
     }
 
     func getScrollAdjustedValue(

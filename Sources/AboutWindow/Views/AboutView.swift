@@ -4,15 +4,6 @@
 //
 //  Created by Andrei Vidrasco on 02.04.2022
 //
-
-import SwiftUI
-
-public enum AboutMode: String, CaseIterable {
-    case about
-    case acknowledgements
-    case contributors
-}
-
 import SwiftUI
 
 public struct AboutView<Footer: View>: View {
@@ -21,18 +12,17 @@ public struct AboutView<Footer: View>: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var currentView: AnyView? // Tracks the current view (nil for root)
-    @State private var aboutMode: AboutMode = .about
     
     @Namespace private var animator
     
-    private let actions: (Namespace.ID) -> AboutActions
+    private let actions: () -> AboutActions
     private let footer: () -> Footer
     private let iconImage: Image?
     private let title: String?
     private let subtitle: String?
     
     public init(
-        @ActionsBuilder actions: @escaping (Namespace.ID) -> AboutActions,
+        @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer,
         iconImage: Image? = nil,
         title: String? = nil,
@@ -76,6 +66,7 @@ public struct AboutView<Footer: View>: View {
             }
         }
         .environmentObject(NamespaceWrapper(namespace: animator))
+        .environment(\.isAboutDetailPresented, currentView != nil)
         .environment(\.aboutWindowNavigation, AboutWindowNavigation(
             navigate: { action in
                 withAnimation(.smooth) {
@@ -90,7 +81,7 @@ public struct AboutView<Footer: View>: View {
                 }
             }
         ))
-        .animation(.smooth, value: aboutMode)
+        .animation(.smooth, value: currentView == nil)
         .ignoresSafeArea()
         .frame(width: 280, height: 400)
         .fixedSize()

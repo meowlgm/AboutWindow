@@ -4,32 +4,30 @@
 //
 //  Created by Giorgi Tchelidze on 02.06.25.
 //
-
 import SwiftUI
 
-public struct CopyrightLicenseView: View {
-    let licenseURL: URL
-    let copyright: String?
+public struct FooterView<PrimaryView: View, SecondaryView: View>: View {
+    let primaryView: PrimaryView?
+    let secondaryView: SecondaryView?
 
     @Environment(\.colorScheme)
     private var colorScheme
 
     public init(
-        licenseURL: URL = URL(string: "https://github.com/CodeEditApp/CodeEdit/blob/main/LICENSE.md")!,
-        copyright: String? = nil
+        @ViewBuilder primaryView: () -> PrimaryView? = { nil },
+        @ViewBuilder secondaryView: () -> SecondaryView? = { nil }
     ) {
-        self.licenseURL = licenseURL
-        self.copyright = copyright
+        self.primaryView = primaryView()
+        self.secondaryView = secondaryView()
     }
 
     public var body: some View {
         VStack(spacing: 2) {
-            Link(destination: licenseURL) {
-                Text("MIT License")
-                    .underline()
+            if let primaryView {
+                primaryView
             }
-            if let copyright {
-                Text(copyright)
+            if let secondaryView {
+                secondaryView
             }
         }
         .textSelection(.disabled)

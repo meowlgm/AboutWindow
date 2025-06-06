@@ -1,0 +1,15 @@
+{
+  "originHash" : "0b73f9c370e433dfbba1f57d48484f2f4643307c14ce378baad141529626b6e2",
+  "pins" : [
+    {
+      "identity" : "codeeditsymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CodeEditApp/CodeEditSymbols.git",
+      "state" : {
+        "revision" : "ae69712b08571c4469c2ed5cd38ad9f19439793e",
+        "version" : "0.2.3"
+      }
+    }
+  ],
+  "version" : 3
+}

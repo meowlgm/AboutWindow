@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CodeEditSymbols
 
 struct ContributorRowView: View {
 
@@ -31,7 +32,7 @@ struct ContributorRowView: View {
                     ActionButton(url: profileURL, image: .init(systemName: "globe"))
                 }
                 if let gitHubURL = contributor.gitHubURL {
-//                    ActionButton(url: gitHubURL, image: .github)
+                    ActionButton(url: gitHubURL, image: .github)
                 }
             }
         }

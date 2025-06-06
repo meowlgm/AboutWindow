@@ -6,7 +6,18 @@
 //
 import SwiftUI
 
+public enum AboutNamespaceID: String {
+    case appIcon = "AppIcon"
+    case title = "Title"
+    case subtitle = "Subtitle"
+    case titleBar = "TitleBar"
+    case scrollView = "ScrollView"
+}
+
 public struct AboutDefaultView<Footer: View>: View {
+    
+    @Environment(\.isAboutDetailPresented) private var isDetail
+    
     private var appVersion: String {
         Bundle.versionString ?? "No Version"
     }
@@ -21,7 +32,7 @@ public struct AboutDefaultView<Footer: View>: View {
 
     var namespace: Namespace.ID
     
-    private let actions: (Namespace.ID) -> AboutActions
+    private let actions: () -> AboutActions
     let footer: () -> Footer
     let iconImage: Image?
     let title: String?
@@ -29,7 +40,7 @@ public struct AboutDefaultView<Footer: View>: View {
     
     public init(
         namespace: Namespace.ID,
-        @ActionsBuilder actions: @escaping (Namespace.ID) -> AboutActions,
+        @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() },
         iconImage: Image? = nil,
         title: String? = nil,
@@ -54,14 +65,13 @@ public struct AboutDefaultView<Footer: View>: View {
         VStack(spacing: 0) {
             (iconImage ?? Image(nsImage: NSApp.applicationIconImage))
                 .resizable()
-                .matchedGeometryEffect(id: "AppIcon", in: namespace)
+                .matchedGeometryEffect(id: AboutNamespaceID.appIcon.rawValue, in: namespace)
                 .frame(width: 128, height: 128)
                 .padding(.top, 16)
                 .padding(.bottom, 8)
 
             VStack(spacing: 0) {
                 Text(title ?? Bundle.displayName)
-                    .matchedGeometryEffect(id: "Title", in: namespace, properties: .position, anchor: .center)
                     .foregroundColor(.primary)
                     .font(.system(
                         size: 26,
@@ -73,13 +83,17 @@ public struct AboutDefaultView<Footer: View>: View {
                     .font(.body)
                     .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
                     .padding(.top, 4)
-                    .matchedGeometryEffect(
-                        id: "Version",
-                        in: namespace,
-                        properties: .position,
-                        anchor: UnitPoint(x: 0.5, y: -0.75)
-                    )
+                    // Apply offset to mimic anchor: UnitPoint(x: 0.5, y: -0.75)
+                    .offset(y: isDetail ? -10 : 0) // Adjust offset dynamically based on isDetail
             }
+            .matchedGeometryEffect(
+                id: AboutNamespaceID.title.rawValue,
+                in: namespace,
+                properties: .position,
+                anchor: .center // Use center for the group, adjust subtitle with offset
+            )
+            .blur(radius: !isDetail ? 0 : 10)
+            .opacity(!isDetail ? 1 : 0)
             .padding(.horizontal)
         }
         .padding(24)
@@ -87,13 +101,15 @@ public struct AboutDefaultView<Footer: View>: View {
         VStack {
             Spacer()
             VStack {
-                ForEach(actions(namespace).all, id: \.id) { action in
+                ForEach(actions().all, id: \.id) { action in
                     action.button
                 }
                 footer()
             }
-            .matchedGeometryEffect(id: "Titlebar", in: namespace, properties: .position, anchor: .top)
-            .matchedGeometryEffect(id: "ScrollView", in: namespace, properties: .position, anchor: .top)
+            .matchedGeometryEffect(id: AboutNamespaceID.titleBar.rawValue, in: namespace, properties: .position, anchor: .top)
+            .matchedGeometryEffect(id: AboutNamespaceID.scrollView.rawValue, in: namespace, properties: .position, anchor: .top)
+            .blur(radius: !isDetail ? 0 : 10)
+            .opacity(!isDetail ? 1 : 0)
         }
         .padding(.horizontal)
     }

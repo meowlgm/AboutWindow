@@ -12,13 +12,13 @@ import AboutWindow
 struct AboutWindowExampleApp: App {
     var body: some Scene {
         Group {
-            AboutWindow(actions: { namespace in
+            AboutWindow(actions: {
                 AboutButton(title: "Acknowledgements", destination: {
-                    AcknowledgementsView(namespace: namespace)
+                    AcknowledgementsView()
                 })
 
                 AboutButton(title: "Contributors", destination: {
-                    ContributorsView(namespace: namespace)
+                    ContributorsView()
                 })
 
                 SomeActionButton(title: "Some Custom Stuff") {
@@ -26,7 +26,17 @@ struct AboutWindowExampleApp: App {
                 }
               
             }, footer: {
-                CopyrightLicenseView()
+                FooterView(
+                    primaryView: {
+                        Link(destination: URL(string: "https://example.com")!) {
+                            Text("Terms")
+                                .underline()
+                        }
+                    },
+                    secondaryView: {
+                        Text("© 2025 Example Inc.")
+                    }
+                )
             })
         }
     }

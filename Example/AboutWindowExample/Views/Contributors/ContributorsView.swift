@@ -8,17 +8,11 @@
 import SwiftUI
 import AboutWindow
 
-public struct ContributorsView: View {
+struct ContributorsView: View {
     @StateObject var model = ContributorsViewModel()
-    @State var aboutMode: AboutMode = .about
-    var namespace: Namespace.ID
-    
-    public init(namespace: Namespace.ID) {
-        self.namespace = namespace
-    }
 
-    public var body: some View {
-        AboutDetailView(title: "Contributors", aboutMode: $aboutMode, namespace: namespace) {
+    var body: some View {
+        AboutDetailView(title: "Contributors") {
             LazyVStack(spacing: 0) {
                 ForEach(model.contributors) { contributor in
                     ContributorRowView(contributor: contributor)

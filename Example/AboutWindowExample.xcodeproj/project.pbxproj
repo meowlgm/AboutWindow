@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E3B04962DEDD2260051D597 /* AboutWindow in Frameworks */ = {isa = PBXBuildFile; productRef = 5E3B04952DEDD2260051D597 /* AboutWindow */; };
+		5E97384C2DF3534500751F11 /* AboutWindow in Frameworks */ = {isa = PBXBuildFile; productRef = 5E97384B2DF3534500751F11 /* AboutWindow */; };
+		5E97384F2DF3539C00751F11 /* CodeEditSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 5E97384E2DF3539C00751F11 /* CodeEditSymbols */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5E3B04942DEDD21D0051D597 /* AboutWindow */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AboutWindow; path = ..; sourceTree = "<group>"; };
+		5E97384A2DF3534200751F11 /* AboutWindow */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AboutWindow; path = ..; sourceTree = "<group>"; };
 		5EA1C8A92DEDD1CC003245D1 /* AboutWindowExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AboutWindowExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -28,17 +29,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E3B04962DEDD2260051D597 /* AboutWindow in Frameworks */,
+				5E97384C2DF3534500751F11 /* AboutWindow in Frameworks */,
+				5E97384F2DF3539C00751F11 /* CodeEditSymbols in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5E3B04922DEDD20E0051D597 /* Frameworks */ = {
+		5E9738492DF3534200751F11 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5E3B04942DEDD21D0051D597 /* AboutWindow */,
+				5E97384A2DF3534200751F11 /* AboutWindow */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -47,7 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				5EA1C8AB2DEDD1CC003245D1 /* AboutWindowExample */,
-				5E3B04922DEDD20E0051D597 /* Frameworks */,
+				5E9738492DF3534200751F11 /* Frameworks */,
 				5EA1C8AA2DEDD1CC003245D1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,7 +82,8 @@
 			);
 			name = AboutWindowExample;
 			packageProductDependencies = (
-				5E3B04952DEDD2260051D597 /* AboutWindow */,
+				5E97384B2DF3534500751F11 /* AboutWindow */,
+				5E97384E2DF3539C00751F11 /* CodeEditSymbols */,
 			);
 			productName = AboutWindowExample;
 			productReference = 5EA1C8A92DEDD1CC003245D1 /* AboutWindowExample.app */;
@@ -110,6 +113,9 @@
 			);
 			mainGroup = 5EA1C8A02DEDD1CC003245D1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5E97384D2DF3539C00751F11 /* XCRemoteSwiftPackageReference "CodeEditSymbols" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5EA1C8AA2DEDD1CC003245D1 /* Products */;
 			projectDirPath = "";
@@ -342,10 +348,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		5E97384D2DF3539C00751F11 /* XCRemoteSwiftPackageReference "CodeEditSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CodeEditApp/CodeEditSymbols.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		5E3B04952DEDD2260051D597 /* AboutWindow */ = {
+		5E97384B2DF3534500751F11 /* AboutWindow */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AboutWindow;
+		};
+		5E97384E2DF3539C00751F11 /* CodeEditSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5E97384D2DF3539C00751F11 /* XCRemoteSwiftPackageReference "CodeEditSymbols" */;
+			productName = CodeEditSymbols;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
