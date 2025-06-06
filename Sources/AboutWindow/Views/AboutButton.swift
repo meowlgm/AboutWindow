@@ -13,6 +13,8 @@ public struct AboutButton: View {
     private let destination: AnyView?
     private let action: (() -> Void)?
 
+    @FocusState private var isfocused: Bool
+
     @Environment(\.aboutWindowNavigation)
     private var aboutWindow
 
@@ -52,6 +54,8 @@ public struct AboutButton: View {
         }
         .controlSize(.large)
         .buttonStyle(.blur)
+        .focused($isfocused)
+        .modifier(FocusRingModifier(isFocused: isfocused, shape: .rect(cornerRadius: 6.5)))
     }
 }
 

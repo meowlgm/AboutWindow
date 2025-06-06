@@ -75,13 +75,16 @@ public struct AboutDefaultView<Footer: View>: View {
                     .padding(.bottom, 8)
 
                 VStack(spacing: 0) {
+
                     Text(title ?? Bundle.displayName)
                         .foregroundColor(.primary)
                         .blur(radius: !isDetail ? 0 : 10)
-                        .font(.system(
-                            size: 26,
-                            weight: .bold
-                        ))
+                        .font(.system(size: 26, weight: .bold))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.5)
+                        .fixedSize(horizontal: false, vertical: true)
+
                     Text(subtitle ?? "Version \(appVersion)\(appVersionPostfix) (\(appBuild))")
                         .textSelection(.enabled)
                         .foregroundColor(Color(.tertiaryLabelColor))
