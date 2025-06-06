@@ -37,22 +37,29 @@ This package is fully documented [here](https://codeeditapp.github.io/AboutWindo
 To use `AboutWindow`, simply add it to your app.
 
 ```swift
-AboutWindow(
-    actions: { dismiss in
-        AboutButton(
-            title: "Acknowledgements",
-            action: {
-                // go to acknowledgements
-            }
-        )
-        AboutButton(
-            title: "Contributors",
-            action: {
-                // go to contributors
-            }
-        )
+AboutWindow(actions: {
+    AboutButton(title: "Contributors", destination: {
+        ContributorsView()
+    })
+    AboutButton(title: "Acknowledgements", destination: {
+        AcknowledgementsView()
+    })
+    SomeActionButton(title: "Some Custom Stuff") {
+        MatchedTitle("Hello")
     }
-)
+}, footer: {
+    FooterView(
+        primaryView: {
+            Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
+                Text("MIT License")
+                    .underline()
+            }
+        },
+        secondaryView: {
+            Text("© 2025 Example Inc.")
+        }
+    )
+})
 ```
 
 ## License
