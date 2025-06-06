@@ -7,11 +7,12 @@
 import SwiftUI
 
 public struct AboutButton: View {
+
     private let id = UUID()
     private let title: String
     private let destination: AnyView?
     private let action: (() -> Void)?
-    
+
     @Environment(\.aboutWindowNavigation)
     private var aboutWindow
 

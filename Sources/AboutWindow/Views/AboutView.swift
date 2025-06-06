@@ -8,20 +8,25 @@
 import SwiftUI
 
 public struct AboutView<Footer: View>: View {
-    @Environment(\.openURL) private var openURL
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.dismiss) private var dismiss
-    
+    @Environment(\.openURL)
+    private var openURL
+
+    @Environment(\.colorScheme)
+    private var colorScheme
+
+    @Environment(\.dismiss)
+    private var dismiss
+
     @State private var currentView: AnyView? // Tracks the current view (nil for root)
-    
+
     @Namespace private var animator
-    
+
     private let actions: () -> AboutActions
     private let footer: () -> Footer
     private let iconImage: Image?
     private let title: String?
     private let subtitle: String?
-    
+
     public init(
         @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer,
@@ -35,7 +40,7 @@ public struct AboutView<Footer: View>: View {
         self.title = title
         self.subtitle = subtitle
     }
-    
+
     public var body: some View {
         ZStack(alignment: .top) {
             // Root view (AboutDefaultView) or destination view
@@ -50,7 +55,6 @@ public struct AboutView<Footer: View>: View {
                     title: title,
                     subtitle: subtitle
                 )
-             
             }
         }
         .environmentObject(NamespaceWrapper(namespace: animator))
@@ -70,8 +74,7 @@ public struct AboutView<Footer: View>: View {
         .animation(.smooth, value: currentView == nil)
         .ignoresSafeArea()
         .frame(width: 280)
-        .frame(minHeight: 400 - 28)
-        .fixedSize()
+        .fixedSize(horizontal: true, vertical: false)
         // hack required to get buttons appearing correctly in light appearance
         // if anyone knows of a better way to do this feel free to refactor
         .background(.regularMaterial.opacity(0))

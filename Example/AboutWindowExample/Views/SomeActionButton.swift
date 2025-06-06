@@ -29,7 +29,7 @@ public struct SomeActionButton: View, NavigableAction {
                 .background(.gray.opacity(0.3))
                 .clipShape(.capsule)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.plain)        
     }
 
     public func destinationView() -> AnyView {

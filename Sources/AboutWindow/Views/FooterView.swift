@@ -1,5 +1,5 @@
 //
-//  CopyrightLicenseView.swift
+//  FooterView.swift
 //  AboutWindow
 //
 //  Created by Giorgi Tchelidze on 02.06.25.
@@ -36,6 +36,6 @@ public struct FooterView<PrimaryView: View, SecondaryView: View>: View {
         .foregroundColor(Color(.tertiaryLabelColor))
         .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
         .padding(.top, 12)
-        .padding(.bottom, 24)
+        .padding(.bottom, -4)
     }
 }

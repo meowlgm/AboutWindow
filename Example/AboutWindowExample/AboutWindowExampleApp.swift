@@ -13,18 +13,15 @@ struct AboutWindowExampleApp: App {
     var body: some Scene {
         Group {
             AboutWindow(actions: {
-                AboutButton(title: "Acknowledgements", destination: {
-                    AcknowledgementsView()
-                })
-
                 AboutButton(title: "Contributors", destination: {
                     ContributorsView()
                 })
-
-//                SomeActionButton(title: "Some Custom Stuff") {
-//                    MatchedTitle("Hello")
-//                }
-              
+                AboutButton(title: "Acknowledgements", destination: {
+                    AcknowledgementsView()
+                })
+                SomeActionButton(title: "Some Custom Stuff") {
+                    MatchedTitle("Hello")
+                }
             }, footer: {
                 FooterView(
                     primaryView: {
@@ -56,7 +53,7 @@ struct MatchedTitle: View {
     var body: some View {
         VStack(alignment: .center) {
             Text(title)
-                .matchedGeometryEffect(id: "Title", in: namespaceWrapper.namespace)
+                .matchedGeometryEffect(id: AboutNamespaceID.title, in: namespaceWrapper.namespace)
             Button("Go Back") {
                 aboutWindow?.pop()
             }
