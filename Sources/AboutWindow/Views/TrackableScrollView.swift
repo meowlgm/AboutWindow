@@ -10,12 +10,13 @@
 
 import SwiftUI
 
+@MainActor
 private struct ScrollViewOffsetPreferenceKey: @preconcurrency PreferenceKey {
     typealias Value = [CGFloat]
 
-    @MainActor static var defaultValue: [CGFloat] = [0]
+    static var defaultValue: [CGFloat] = [0]
 
-    static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
+    nonisolated static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
         value.append(contentsOf: nextValue())
     }
 }
@@ -79,7 +80,7 @@ struct TrackableScrollView<Content>: View where Content: View {
                     }
                 }
             }
-            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
+            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { @MainActor value in
                 self.contentOffset = value[0]
                 if self.contentTrailingOffset != nil {
                     self.contentTrailingOffset = value[1]
