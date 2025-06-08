@@ -80,10 +80,12 @@ struct TrackableScrollView<Content>: View where Content: View {
                     }
                 }
             }
-            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { @MainActor value in
-                self.contentOffset = value[0]
-                if self.contentTrailingOffset != nil {
-                    self.contentTrailingOffset = value[1]
+            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
+                Task { @MainActor in
+                    contentOffset = value[0]
+                    if contentTrailingOffset != nil {
+                        contentTrailingOffset = value[1]
+                    }
                 }
             }
         }
