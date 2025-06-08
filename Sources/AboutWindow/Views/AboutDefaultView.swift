@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct AboutDefaultView<Footer: View>: View {
+public struct AboutDefaultView<Footer: View, SubtitleView: View>: View {
 
     @Environment(\.isAboutDetailPresented)
     private var isDetail
@@ -30,7 +30,7 @@ public struct AboutDefaultView<Footer: View>: View {
     let footer: () -> Footer
     let iconImage: Image?
     let title: String?
-    let subtitle: String?
+    let subtitleView: (() -> SubtitleView)?
 
     public init(
         namespace: Namespace.ID,
@@ -38,14 +38,14 @@ public struct AboutDefaultView<Footer: View>: View {
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() },
         iconImage: Image? = nil,
         title: String? = nil,
-        subtitle: String? = nil
+        subtitleView: (() -> SubtitleView)? = nil
     ) {
         self.namespace = namespace
         self.actions = actions
         self.footer = footer
         self.iconImage = iconImage
         self.title = title
-        self.subtitle = subtitle
+        self.subtitleView = subtitleView
     }
 
     @Environment(\.colorScheme)
@@ -84,17 +84,22 @@ public struct AboutDefaultView<Footer: View>: View {
                         .lineLimit(2)
                         .minimumScaleFactor(0.5)
                         .fixedSize(horizontal: false, vertical: true)
-
-                    Text(subtitle ?? "Version \(appVersion)\(appVersionPostfix) (\(appBuild))")
-                        .textSelection(.enabled)
-                        .foregroundColor(Color(.tertiaryLabelColor))
-                        .font(.body)
-                        .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
-                        .padding(.top, 4)
-                    // Apply offset to mimic anchor: UnitPoint(x: 0.5, y: -0.75)
-                        .offset(y: isDetail ? -10 : 0) // Adjust offset dynamically based on isDetail
-                        .blur(radius: !isDetail ? 0 : 10)
-                        .opacity(!isDetail ? 1 : 0)
+                    Group {
+                        if let subtitleView {
+                            subtitleView()
+                        } else {
+                            Text("Version \(appVersion)\(appVersionPostfix) (\(appBuild))")
+                                .textSelection(.enabled)
+                        }
+                    }
+                    .foregroundColor(Color(.tertiaryLabelColor))
+                    .font(.body)
+                    .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
+                    .padding(.top, 4)
+                // Apply offset to mimic anchor: UnitPoint(x: 0.5, y: -0.75)
+                    .offset(y: isDetail ? -10 : 0) // Adjust offset dynamically based on isDetail
+                    .blur(radius: !isDetail ? 0 : 10)
+                    .opacity(!isDetail ? 1 : 0)
                 }
                 .matchedGeometryEffect(
                     id: AboutNamespaceID.title,

@@ -7,23 +7,23 @@
 
 import SwiftUI
 
-public struct AboutWindow<Footer: View>: Scene {
+public struct AboutWindow<Footer: View, SubtitleView: View>: Scene {
     private let actions: () -> AboutActions
     let footer: () -> Footer
     let iconImage: Image?
     let title: String?
-    let subtitle: String?
+    let subtitleView: (() -> SubtitleView)?
 
     public init(
         iconImage: Image? = nil,
         title: String? = nil,
-        subtitle: String? = nil,
+        subtitleView: (() -> SubtitleView)? = nil,
         @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
     ) {
         self.iconImage = iconImage
         self.title = title
-        self.subtitle = subtitle
+        self.subtitleView = subtitleView
         self.actions = actions
         self.footer = footer
     }
@@ -35,7 +35,7 @@ public struct AboutWindow<Footer: View>: Scene {
                 footer: footer,
                 iconImage: iconImage,
                 title: title,
-                subtitle: subtitle
+                subtitleView: subtitleView
             )
                 .task {
                     if let window = NSApp.findWindow(DefaultSceneID.about) {
@@ -55,5 +55,23 @@ public struct AboutWindow<Footer: View>: Scene {
         }
         .windowResizability(.contentSize)
         .windowStyle(.hiddenTitleBar)
+    }
+}
+
+extension AboutWindow where SubtitleView == EmptyView {
+    /// Creates an about window without a subtitle view.
+    public init(
+        iconImage: Image? = nil,
+        title: String? = nil,
+        @ActionsBuilder actions: @escaping () -> AboutActions,
+        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
+    ) {
+        self.init(
+            iconImage: iconImage,
+            title: title,
+            subtitleView: nil,
+            actions: actions,
+            footer: footer
+        )
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct AboutView<Footer: View>: View {
+public struct AboutView<Footer: View, SubtitleView: View>: View {
     @Environment(\.openURL)
     private var openURL
 
@@ -25,20 +25,20 @@ public struct AboutView<Footer: View>: View {
     private let footer: () -> Footer
     private let iconImage: Image?
     private let title: String?
-    private let subtitle: String?
+    private let subtitleView: (() -> SubtitleView)?
 
     public init(
         @ActionsBuilder actions: @escaping () -> AboutActions,
         @ViewBuilder footer: @escaping () -> Footer,
         iconImage: Image? = nil,
         title: String? = nil,
-        subtitle: String? = nil
+        subtitleView: (() -> SubtitleView)? = nil
     ) {
         self.actions = actions
         self.footer = footer
         self.iconImage = iconImage
         self.title = title
-        self.subtitle = subtitle
+        self.subtitleView = subtitleView
     }
 
     public var body: some View {
@@ -53,7 +53,7 @@ public struct AboutView<Footer: View>: View {
                     footer: footer,
                     iconImage: iconImage,
                     title: title,
-                    subtitle: subtitle
+                    subtitleView: subtitleView
                 )
             }
         }
