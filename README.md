@@ -18,8 +18,7 @@
 A customizable About window for macOS applications, featuring an app icon, version info, up to three action buttons, and footer text. Supports in-window navigation to custom pages, making it easy to showcase details, acknowledgments, or licensing information in a native, polished interface.
 
 ![GitHub release](https://img.shields.io/github/v/release/CodeEditApp/AboutWindow?color=orange&label=latest%20release&sort=semver&style=flat-square)
-![Github Tests](https://img.shields.io/github/actions/workflow/status/CodeEditApp/AboutWindow/tests.yml?branch=main&label=tests&style=flat-square)
-![Documentation](https://img.shields.io/github/actions/workflow/status/CodeEditApp/AboutWindow/build-documentation.yml?branch=main&label=docs&style=flat-square)
+![Github Tests](https://img.shields.io/github/actions/workflow/status/CodeEditApp/AboutWindow/CI-push.yml?branch=main&label=tests&style=flat-square)
 ![GitHub Repo stars](https://img.shields.io/github/stars/CodeEditApp/AboutWindow?style=flat-square)
 ![GitHub forks](https://img.shields.io/github/forks/CodeEditApp/AboutWindow?style=flat-square)
 [![Discord Badge](https://img.shields.io/discord/951544472238444645?color=5865F2&label=Discord&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/vChUXVf9Em)
