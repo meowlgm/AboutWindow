@@ -21,7 +21,7 @@ struct ContributorsView: View {
                         .opacity(0.5)
                 }
             }
-        
+
         }
     }
 }

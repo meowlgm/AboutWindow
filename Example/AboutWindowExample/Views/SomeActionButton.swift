@@ -20,16 +20,16 @@ public struct SomeActionButton: View, NavigableAction {
     }
 
     public var body: some View {
-        Button(action: {
+        Button {
             aboutWindow?.navigate(self)
-        }) {
+        } label: {
             Text(title)
                 .padding(.horizontal, 7.5)
                 .padding(.vertical, 5)
                 .background(.gray.opacity(0.3))
                 .clipShape(.capsule)
         }
-        .buttonStyle(.plain)        
+        .buttonStyle(.plain)
     }
 
     public func destinationView() -> AnyView {

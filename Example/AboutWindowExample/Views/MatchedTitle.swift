@@ -12,7 +12,7 @@ struct MatchedTitle: View {
     @EnvironmentObject var namespaceWrapper: NamespaceWrapper
     @Environment(\.aboutWindowNavigation)
     private var aboutWindow
-    
+
     let title: String
 
     init(_ title: String) {
