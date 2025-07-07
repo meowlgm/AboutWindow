@@ -6,6 +6,8 @@
 //
 import SwiftUI
 
+/// The default `AboutWindow` button to add to the about window.
+/// Performs a given action when pressed.
 public struct AboutButton: View {
 
     private let id = UUID()

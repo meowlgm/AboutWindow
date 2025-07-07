@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A `SwiftUI` Scene presenting an app icon, buttons, and more, in a stylized window.
 public struct AboutWindow<Footer: View, SubtitleView: View>: Scene {
     private let actions: () -> AboutActions
     let footer: () -> Footer
