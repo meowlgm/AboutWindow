@@ -4,7 +4,7 @@ A customizable About window for macOS applications, featuring an app icon, versi
 
 ## Overview
 
-To use `AboutWindow`, simply add it to your app.
+To use `AboutWindow`, simply add it as a scene in your app.
 
 ```swift
 AboutWindow(actions: {
