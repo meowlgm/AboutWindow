@@ -30,7 +30,7 @@ public struct AboutWindow<Footer: View, SubtitleView: View>: Scene {
     }
 
     public var body: some Scene {
-        Window("", id: DefaultSceneID.about) {
+        WindowGroup("") {
             AboutView(
                 actions: actions,
                 footer: footer,
@@ -38,24 +38,41 @@ public struct AboutWindow<Footer: View, SubtitleView: View>: Scene {
                 title: title,
                 subtitleView: subtitleView
             )
-                .task {
-                    if let window = NSApp.findWindow(DefaultSceneID.about) {
-                        window.styleMask = [
-                            .titled, .closable, .fullSizeContentView, .nonactivatingPanel
-                        ]
+            .task {
+                // With WindowGroup on macOS 12, the scene id may not map to window.identifier.
+                // Fallback to keyWindow so styling always applies.
+                let targetWindow = NSApp.findWindow(DefaultSceneID.about) ?? NSApp.keyWindow
+                if let window = targetWindow {
+                    window.styleMask = [
+                        .titled, .closable, .fullSizeContentView, .nonactivatingPanel,
+                    ]
 
-                        window.titleVisibility = .hidden
-                        window.titlebarAppearsTransparent = true
-                        window.backgroundColor = .clear
-                        window.isMovableByWindowBackground = true
+                    window.titleVisibility = .hidden
+                    window.titlebarAppearsTransparent = true
+                    window.isOpaque = true
+                    window.backgroundColor = .windowBackgroundColor
+                    window.isMovableByWindowBackground = true
 
-                        window.standardWindowButton(.zoomButton)?.isHidden = true
-                        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+                    window.standardWindowButton(.zoomButton)?.isHidden = true
+                    window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+
+                    // Match the compact, content-fitting look from the project intro on macOS 12+
+                    DispatchQueue.main.async {
+                        if let contentView = window.contentView {
+                            contentView.layoutSubtreeIfNeeded()
+                            var fittingSize = contentView.fittingSize
+                            if fittingSize.width <= 1 || fittingSize.height <= 1 {
+                                fittingSize = NSSize(width: 280, height: 420)
+                            }
+                            window.setContentSize(fittingSize)
+                            window.minSize = fittingSize
+                            window.maxSize = fittingSize
+                            window.center()
+                        }
                     }
                 }
+            }
         }
-        .windowResizability(.contentSize)
-        .windowStyle(.hiddenTitleBar)
     }
 }
 
