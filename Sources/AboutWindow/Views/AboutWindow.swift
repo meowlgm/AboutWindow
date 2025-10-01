@@ -10,6 +10,8 @@
 /// A custom NSWindow subclass for the About window with proper styling
 private class AboutNSWindow: NSWindow {
     private var stateObservers: [NSObjectProtocol] = []
+    // Keep strong reference to the hosting controller to prevent premature deallocation
+    fileprivate var hostingController: NSViewController?
 
     override init(
         contentRect: NSRect,
@@ -29,6 +31,9 @@ private class AboutNSWindow: NSWindow {
 
         // Add observers to maintain style on state changes
         setupObservers()
+
+        // Don't release window immediately when closed
+        self.isReleasedWhenClosed = false
     }
 
     private func configureWindowStyle() {
@@ -65,10 +70,32 @@ private class AboutNSWindow: NSWindow {
             }
         }
         stateObservers.append(resignKeyObserver)
+
+        // Clean up when window will close
+        let closeObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: self,
+            queue: .main
+        ) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.cleanup()
+            }
+        }
+        stateObservers.append(closeObserver)
+    }
+
+    private func cleanup() {
+        stateObservers.forEach { NotificationCenter.default.removeObserver($0) }
+        stateObservers.removeAll()
+        hostingController = nil
+        contentViewController = nil
     }
 
     deinit {
-        stateObservers.forEach { NotificationCenter.default.removeObserver($0) }
+        let observers = stateObservers
+        DispatchQueue.main.async {
+            observers.forEach { NotificationCenter.default.removeObserver($0) }
+        }
     }
 }
 
@@ -133,7 +160,9 @@ public struct AboutWindow<Footer: View, SubtitleView: View> {
             defer: false
         )
 
+        // Store hosting controller in window to prevent premature deallocation
         window.contentViewController = hostingController
+        window.hostingController = hostingController
 
         // Size window to fit content
         DispatchQueue.main.async {
