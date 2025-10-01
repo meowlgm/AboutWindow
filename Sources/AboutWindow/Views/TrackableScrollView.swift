@@ -17,7 +17,8 @@ private struct ScrollViewOffsetPreferenceKey: @preconcurrency PreferenceKey {
     static var defaultValue: [CGFloat] = [0]
 
     nonisolated static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
-        value.append(contentsOf: nextValue())
+        // Keep only the latest emitted value to avoid multiple updates per frame
+        value = nextValue()
     }
 }
 
@@ -71,7 +72,7 @@ struct TrackableScrollView<Content>: View where Content: View {
                                     self.calculateContentTrailingOffset(
                                         fromOutsideProxy: outsideProxy,
                                         insideProxy: insideProxy
-                                    )
+                                    ),
                                 ]
                             )
                     }
@@ -81,10 +82,14 @@ struct TrackableScrollView<Content>: View where Content: View {
                 }
             }
             .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
-                Task { @MainActor in
-                    contentOffset = value[0]
-                    if contentTrailingOffset != nil {
-                        contentTrailingOffset = value[1]
+                let newOffset = value.indices.contains(0) ? value[0] : 0
+                if abs(newOffset - contentOffset) > 0.5 {
+                    contentOffset = newOffset
+                }
+                if contentTrailingOffset != nil, value.indices.contains(1) {
+                    let newTrailing = value[1]
+                    if abs((contentTrailingOffset ?? 0) - newTrailing) > 0.5 {
+                        contentTrailingOffset = newTrailing
                     }
                 }
             }
