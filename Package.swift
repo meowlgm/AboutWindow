@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/lukepistrol/SwiftLintPlugin",
-            from: "0.2.2"
+            from: "0.59.0"
         )
     ],
     targets: [
