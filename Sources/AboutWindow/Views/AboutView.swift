@@ -17,7 +17,7 @@ public struct AboutView<Footer: View, SubtitleView: View>: View {
     @Environment(\.dismiss)
     private var dismiss
 
-    @State private var currentView: AnyView?  // Tracks the current view (nil for root)
+    @State private var currentView: AnyView? // Tracks the current view (nil for root)
 
     @Namespace private var animator
 
@@ -26,8 +26,6 @@ public struct AboutView<Footer: View, SubtitleView: View>: View {
     private let iconImage: Image?
     private let title: String?
     private let subtitleView: (() -> SubtitleView)?
-
-    private var transitionAnimation: Animation { .easeInOut }
 
     public init(
         @ActionsBuilder actions: @escaping () -> AboutActions,
@@ -61,22 +59,19 @@ public struct AboutView<Footer: View, SubtitleView: View>: View {
         }
         .environmentObject(NamespaceWrapper(namespace: animator))
         .environment(\.isAboutDetailPresented, currentView != nil)
-        .environment(
-            \.aboutWindowNavigation,
-            AboutWindowNavigation(
-                navigate: { action in
-                    withAnimation {
-                        currentView = action.destinationView()
-                    }
-                },
-                pop: {
-                    withAnimation {
-                        currentView = nil
-                    }
+        .environment(\.aboutWindowNavigation, AboutWindowNavigation(
+            navigate: { action in
+                withAnimation {
+                    currentView = action.destinationView()
                 }
-            )
-        )
-        .animation(transitionAnimation, value: currentView == nil)
+            },
+            pop: {
+                withAnimation {
+                    currentView = nil
+                }
+            }
+        ))
+        .animation(.smooth, value: currentView == nil)
         .ignoresSafeArea()
         .frame(width: 280)
         .fixedSize(horizontal: true, vertical: false)
