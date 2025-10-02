@@ -15,17 +15,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/lukepistrol/SwiftLintPlugin",
-            from: "0.59.0"
-        )
     ],
     targets: [
         .target(
-            name: "AboutWindow",
-            plugins: [
-                .plugin(name: "SwiftLint", package: "SwiftLintPlugin")
-            ]
+            name: "AboutWindow"
         ),
         .testTarget(
             name: "AboutWindowTests",
