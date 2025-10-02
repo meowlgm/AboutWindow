@@ -12,10 +12,9 @@ let package = Package(
         .library(
             name: "AboutWindow",
             targets: ["AboutWindow"]
-        ),
+        )
     ],
-    dependencies: [
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "AboutWindow"
