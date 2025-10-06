@@ -33,9 +33,38 @@ This package is fully documented [here](https://codeeditapp.github.io/AboutWindo
 
 ## Usage
 
-To use `AboutWindow`, call the static `show()` method from a menu item, button, or anywhere in your app. The window uses AppKit's `NSPanel` for better control and native behavior.
+`AboutWindow` is an AppKit-based window (NSPanel) that can be displayed by calling the static `show()` method. This design provides better window lifecycle control and native macOS behavior.
 
-### From a Menu Command
+### Basic Usage
+
+Simply call `AboutWindow.show()` from anywhere in your code:
+
+```swift
+AboutWindow.show(
+    actions: {
+        AboutButton(title: "Contributors", destination: {
+            ContributorsView()
+        })
+        AboutButton(title: "Acknowledgements", destination: {
+            AcknowledgementsView()
+        })
+    },
+    footer: {
+        FooterView(
+            primaryView: {
+                Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
+                    Text("MIT License").underline()
+                }
+            },
+            secondaryView: {
+                Text("© 2025 Example Inc.")
+            }
+        )
+    }
+)
+```
+
+### Recommended: Replace App Menu "About" Item
 
 ```swift
 @main
@@ -47,67 +76,36 @@ struct YourApp: App {
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button("About Your App") {
-                    showAboutWindow()
+                    AboutWindow.show(
+                        actions: { /* ... */ },
+                        footer: { /* ... */ }
+                    )
                 }
             }
         }
     }
-    
-    private func showAboutWindow() {
-        AboutWindow.show(
-            actions: {
-                AboutButton(title: "Contributors", destination: {
-                    ContributorsView()
-                })
-                AboutButton(title: "Acknowledgements", destination: {
-                    AcknowledgementsView()
-                })
-            },
-            footer: {
-                FooterView(
-                    primaryView: {
-                        Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
-                            Text("MIT License").underline()
-                        }
-                    },
-                    secondaryView: {
-                        Text("© 2025 Example Inc.")
-                    }
-                )
-            }
-        )
-    }
 }
 ```
 
-### From a Button
+### Minimal Example
+
+If you don't need action buttons or footer, you can call it with minimal parameters:
 
 ```swift
-Button("Show About Window") {
-    AboutWindow.show(
-        actions: {
-            AboutButton(title: "Contributors", destination: {
-                ContributorsView()
-            })
-            AboutButton(title: "Acknowledgements", destination: {
-                AcknowledgementsView()
-            })
-        },
-        footer: {
-            FooterView(
-                primaryView: {
-                    Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
-                        Text("MIT License").underline()
-                    }
-                },
-                secondaryView: {
-                    Text("© 2025 Example Inc.")
-                }
-            )
-        }
-    )
-}
+AboutWindow.show(
+    actions: {
+        // Empty or minimal actions
+    }
+)
 ```
+
+### Key Features
+
+- **Singleton Pattern**: Multiple calls show the same window instance
+- **Auto-centering**: Window automatically centers on screen
+- **Auto-activation**: Brings window to front when called
+- **Flexible Invocation**: Call from menus, buttons, or any code location
+- **Native Behavior**: Uses AppKit's NSPanel for optimal macOS integration
 
 ## License
 
