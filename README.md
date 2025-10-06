@@ -33,32 +33,80 @@ This package is fully documented [here](https://codeeditapp.github.io/AboutWindo
 
 ## Usage
 
-To use `AboutWindow`, simply add it to your app.
+To use `AboutWindow`, call the static `show()` method from a menu item, button, or anywhere in your app. The window uses AppKit's `NSPanel` for better control and native behavior.
+
+### From a Menu Command
 
 ```swift
-AboutWindow(actions: {
-    AboutButton(title: "Contributors", destination: {
-        ContributorsView()
-    })
-    AboutButton(title: "Acknowledgements", destination: {
-        AcknowledgementsView()
-    })
-    SomeActionButton(title: "Some Custom Stuff") {
-        MatchedTitle("Hello")
-    }
-}, footer: {
-    FooterView(
-        primaryView: {
-            Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
-                Text("MIT License")
-                    .underline()
+@main
+struct YourApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Your App") {
+                    showAboutWindow()
+                }
             }
+        }
+    }
+    
+    private func showAboutWindow() {
+        AboutWindow.show(
+            actions: {
+                AboutButton(title: "Contributors", destination: {
+                    ContributorsView()
+                })
+                AboutButton(title: "Acknowledgements", destination: {
+                    AcknowledgementsView()
+                })
+            },
+            footer: {
+                FooterView(
+                    primaryView: {
+                        Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
+                            Text("MIT License").underline()
+                        }
+                    },
+                    secondaryView: {
+                        Text("© 2025 Example Inc.")
+                    }
+                )
+            }
+        )
+    }
+}
+```
+
+### From a Button
+
+```swift
+Button("Show About Window") {
+    AboutWindow.show(
+        actions: {
+            AboutButton(title: "Contributors", destination: {
+                ContributorsView()
+            })
+            AboutButton(title: "Acknowledgements", destination: {
+                AcknowledgementsView()
+            })
         },
-        secondaryView: {
-            Text("© 2025 Example Inc.")
+        footer: {
+            FooterView(
+                primaryView: {
+                    Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
+                        Text("MIT License").underline()
+                    }
+                },
+                secondaryView: {
+                    Text("© 2025 Example Inc.")
+                }
+            )
         }
     )
-})
+}
 ```
 
 ## License
