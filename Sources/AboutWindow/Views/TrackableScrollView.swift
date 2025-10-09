@@ -10,13 +10,12 @@
 
 import SwiftUI
 
-@MainActor
-private struct ScrollViewOffsetPreferenceKey: @preconcurrency PreferenceKey {
+private struct ScrollViewOffsetPreferenceKey: PreferenceKey {
     typealias Value = [CGFloat]
 
     static var defaultValue: [CGFloat] = [0]
 
-    nonisolated static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
+    static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
         value.append(contentsOf: nextValue())
     }
 }
