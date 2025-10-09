@@ -71,7 +71,7 @@ public struct AboutView<Footer: View, SubtitleView: View>: View {
                 }
             }
         ))
-        .animation(.smooth, value: currentView == nil)
+        .animation(.easeInOut, value: currentView == nil)
         .ignoresSafeArea()
         .frame(width: 280)
         .fixedSize(horizontal: true, vertical: false)

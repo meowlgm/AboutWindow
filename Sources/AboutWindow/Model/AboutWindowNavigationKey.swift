@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// A key for accessing the `AboutWindowNavigation` controller in the SwiftUI environment.
-public struct AboutWindowNavigationKey: @preconcurrency EnvironmentKey {
+public struct AboutWindowNavigationKey: EnvironmentKey {
     @MainActor public static let defaultValue: AboutWindowNavigation? = nil
 }
 

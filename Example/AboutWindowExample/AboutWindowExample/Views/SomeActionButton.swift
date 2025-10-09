@@ -27,7 +27,7 @@ public struct SomeActionButton: View, NavigableAction {
                 .padding(.horizontal, 7.5)
                 .padding(.vertical, 5)
                 .background(.gray.opacity(0.3))
-                .clipShape(.capsule)
+                .clipShape(Capsule())
         }
         .buttonStyle(.plain)
     }

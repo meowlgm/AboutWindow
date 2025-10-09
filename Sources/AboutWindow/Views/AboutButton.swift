@@ -57,7 +57,7 @@ public struct AboutButton: View {
         .controlSize(.large)
         .buttonStyle(.blur)
         .focused($isfocused)
-        .modifier(FocusRingModifier(isFocused: isfocused, shape: .rect(cornerRadius: 6.5)))
+        .modifier(FocusRingModifier(isFocused: isfocused, shape: RoundedRectangle(cornerRadius: 6.5)))
     }
 }
 
