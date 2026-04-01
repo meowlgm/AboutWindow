@@ -33,33 +33,79 @@ This package is fully documented [here](https://codeeditapp.github.io/AboutWindo
 
 ## Usage
 
-To use `AboutWindow`, simply add it to your app.
+`AboutWindow` is an AppKit-based window (NSPanel) that can be displayed by calling the static `show()` method. This design provides better window lifecycle control and native macOS behavior.
+
+### Basic Usage
+
+Simply call `AboutWindow.show()` from anywhere in your code:
 
 ```swift
-AboutWindow(actions: {
-    AboutButton(title: "Contributors", destination: {
-        ContributorsView()
-    })
-    AboutButton(title: "Acknowledgements", destination: {
-        AcknowledgementsView()
-    })
-    SomeActionButton(title: "Some Custom Stuff") {
-        MatchedTitle("Hello")
-    }
-}, footer: {
-    FooterView(
-        primaryView: {
-            Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
-                Text("MIT License")
-                    .underline()
+AboutWindow.show(
+    actions: {
+        AboutButton(title: "Contributors", destination: {
+            ContributorsView()
+        })
+        AboutButton(title: "Acknowledgements", destination: {
+            AcknowledgementsView()
+        })
+    },
+    footer: {
+        FooterView(
+            primaryView: {
+                Link(destination: URL(string: "https://opensource.org/licenses/MIT")!) {
+                    Text("MIT License").underline()
+                }
+            },
+            secondaryView: {
+                Text("© 2025 Example Inc.")
             }
-        },
-        secondaryView: {
-            Text("© 2025 Example Inc.")
-        }
-    )
-})
+        )
+    }
+)
 ```
+
+### Recommended: Replace App Menu "About" Item
+
+```swift
+@main
+struct YourApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Your App") {
+                    AboutWindow.show(
+                        actions: { /* ... */ },
+                        footer: { /* ... */ }
+                    )
+                }
+            }
+        }
+    }
+}
+```
+
+### Minimal Example
+
+If you don't need action buttons or footer, you can call it with minimal parameters:
+
+```swift
+AboutWindow.show(
+    actions: {
+        // Empty or minimal actions
+    }
+)
+```
+
+### Key Features
+
+- **Singleton Pattern**: Multiple calls show the same window instance
+- **Auto-centering**: Window automatically centers on screen
+- **Auto-activation**: Brings window to front when called
+- **Flexible Invocation**: Call from menus, buttons, or any code location
+- **Native Behavior**: Uses AppKit's NSPanel for optimal macOS integration
 
 ## License
 

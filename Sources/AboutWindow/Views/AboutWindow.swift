@@ -5,74 +5,111 @@
 //  Created by Wouter Hennen on 14/03/2023.
 //
 
+import AppKit
 import SwiftUI
 
-/// A `SwiftUI` Scene presenting an app icon, buttons, and more, in a stylized window.
-public struct AboutWindow<Footer: View, SubtitleView: View>: Scene {
-    private let actions: () -> AboutActions
-    let footer: () -> Footer
-    let iconImage: Image?
-    let title: String?
-    let subtitleView: (() -> SubtitleView)?
+/// An AppKit-based window presenting an app icon, buttons, and more, in a stylized window.
+public class AboutWindow: NSPanel {
+    private static var shared: AboutWindow?
 
-    public init(
+    /// Shows the About window, creating it if necessary
+    public static func show<Footer: View, SubtitleView: View>(
         iconImage: Image? = nil,
         title: String? = nil,
         subtitleView: (() -> SubtitleView)? = nil,
         @ActionsBuilder actions: @escaping () -> AboutActions,
-        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
+        @ViewBuilder footer: @escaping () -> Footer
     ) {
-        self.iconImage = iconImage
-        self.title = title
-        self.subtitleView = subtitleView
-        self.actions = actions
-        self.footer = footer
-    }
-
-    public var body: some Scene {
-        Window("", id: DefaultSceneID.about) {
-            AboutView(
-                actions: actions,
-                footer: footer,
-                iconImage: iconImage,
-                title: title,
-                subtitleView: subtitleView
-            )
-                .task {
-                    if let window = NSApp.findWindow(DefaultSceneID.about) {
-                        window.styleMask = [
-                            .titled, .closable, .fullSizeContentView, .nonactivatingPanel
-                        ]
-
-                        window.titleVisibility = .hidden
-                        window.titlebarAppearsTransparent = true
-                        window.backgroundColor = .clear
-                        window.isMovableByWindowBackground = true
-
-                        window.standardWindowButton(.zoomButton)?.isHidden = true
-                        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
-                    }
-                }
+        if let existingWindow = shared {
+            existingWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
         }
-        .windowResizability(.contentSize)
-        .windowStyle(.hiddenTitleBar)
-    }
-}
 
-extension AboutWindow where SubtitleView == EmptyView {
-    /// Creates an about window without a subtitle view.
-    public init(
+        let aboutView = AboutView(
+            actions: actions,
+            footer: footer,
+            iconImage: iconImage,
+            title: title,
+            subtitleView: subtitleView
+        )
+
+        let hostingController = NSHostingController(rootView: aboutView)
+
+        let window = AboutWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 280, height: 400),
+            styleMask: [.titled, .closable, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+
+        window.contentViewController = hostingController
+        window.center()
+        window.title = ""
+        window.titleVisibility = .hidden
+        window.titlebarAppearsTransparent = true
+        window.backgroundColor = .clear
+        window.isMovableByWindowBackground = true
+        window.isReleasedWhenClosed = false
+
+        window.standardWindowButton(.zoomButton)?.isHidden = true
+        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+
+        shared = window
+
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    /// Shows the About window without subtitle view
+    public static func show<Footer: View>(
         iconImage: Image? = nil,
         title: String? = nil,
         @ActionsBuilder actions: @escaping () -> AboutActions,
-        @ViewBuilder footer: @escaping () -> Footer = { EmptyView() }
+        @ViewBuilder footer: @escaping () -> Footer
     ) {
-        self.init(
+        show(
             iconImage: iconImage,
             title: title,
-            subtitleView: nil,
+            subtitleView: { EmptyView() } as (() -> EmptyView)?,
             actions: actions,
             footer: footer
         )
+    }
+
+    /// Shows the About window with default footer
+    public static func show<SubtitleView: View>(
+        iconImage: Image? = nil,
+        title: String? = nil,
+        subtitleView: (() -> SubtitleView)? = nil,
+        @ActionsBuilder actions: @escaping () -> AboutActions
+    ) {
+        show(
+            iconImage: iconImage,
+            title: title,
+            subtitleView: subtitleView,
+            actions: actions,
+            footer: { EmptyView() }
+        )
+    }
+
+    /// Shows the About window without subtitle view and with default footer
+    public static func show(
+        iconImage: Image? = nil,
+        title: String? = nil,
+        @ActionsBuilder actions: @escaping () -> AboutActions
+    ) {
+        show(
+            iconImage: iconImage,
+            title: title,
+            subtitleView: { EmptyView() } as (() -> EmptyView)?,
+            actions: actions,
+            footer: { EmptyView() }
+        )
+    }
+
+    public override func close() {
+        super.close()
+        Self.shared = nil
     }
 }

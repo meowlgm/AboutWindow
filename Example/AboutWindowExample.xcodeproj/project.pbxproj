@@ -115,7 +115,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5E97384D2DF3539C00751F11 /* XCRemoteSwiftPackageReference "CodeEditSymbols" */,
-				5E9744192DF380BD00751F11 /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5EA1C8AA2DEDD1CC003245D1 /* Products */;
@@ -356,14 +355,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.1.4;
-			};
-		};
-		5E9744192DF380BD00751F11 /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lukepistrol/SwiftLintPlugin";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.59.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
